@@ -12,3 +12,7 @@ la visualización de ventas, productos y diversas métricas que considero que so
 - Carga: almacenamiento en una base de datos relacional (PostgreSQL).
 - Orquestación: tareas automatizadas con Apache Airflow.
 - Visualización: dashboard de métricas (Power BI).
+
+# Distribución de ramas
+
+Debido a las circunstancias de la incompatibilidad e ineficiencia a la que me vi desafiado al momento de querer incorprorar un sistema de logging con Kafka compaginado con Airflow, me vi obligado a dividir mi proyecto en dos versiones: una de ellas orquestada y ejecutándose con Airflow, y la restante con un sistema de logging. Se pueden observar ambas versiones en el apartado de ramas.
