@@ -1,4 +1,3 @@
-from app.kafka_python.producer import handle_db_errors, log_and_return
 from app.models.auto_models import RawMaterial, Stock
 from app.repositories.base_repository import Repository
 from sqlalchemy.orm import joinedload
@@ -17,7 +16,7 @@ class RawMaterialRepository(Repository):
         '''
         return dict(zip(df['rm_name'], df['amount']))
 
-    @handle_db_errors
+    
     def _get_rm_amount(self, r_id: int, name: str) -> float:
         '''
         Obtiene la cantidad almacenada de una materia prima específica
@@ -30,7 +29,6 @@ class RawMaterialRepository(Repository):
             ).scalar()
         return rm_amount
 
-    @handle_db_errors
     def update_stock_amounts(
         self, 
         r_id: int,  
@@ -91,8 +89,6 @@ class RawMaterialRepository(Repository):
             directory = BASE_DIR / "data" / "addition"
             ok, error = self._save_csv(r_id, rm_and_amount, directory, 'stock_addition')
             if not ok:
-                log_and_return(r_id, f'FileError : "stock_addition.csv"', 'ERROR', __name__)
                 return False, error
-            log_and_return(r_id, f'FileCreated : "stock_addition.csv"', 'INFO', __name__)
         
         return True, str(directory)

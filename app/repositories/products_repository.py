@@ -1,4 +1,3 @@
-from app.kafka_python.producer import log_and_return
 from app.models.auto_models import Products
 from app.repositories.base_repository import Repository
 import pandas as pd
@@ -33,9 +32,7 @@ class ProductsRepository(Repository):
             directory = BASE_DIR / "data" / "consumption"
             ok, error = self._save_csv(r_id, data, directory, 'products_consumption')
             if not ok:
-                log_and_return(r_id, f'FileError : "products_consumption.csv"', 'ERROR', __name__)
                 return False, error
             
-        log_and_return(r_id, f'FileCreated : "products_consumption.csv"', 'INFO', __name__)
         return True, directory
     
