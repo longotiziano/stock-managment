@@ -18,4 +18,4 @@ __pycache__/
 .vscode/
 
 # Airflow
-./airflow_folder/airflow_init.sh
+airflow_folder/airflow_init.sh
