@@ -1,7 +1,6 @@
 # app
 
 This directory contains the main application code, including database access, Kafka integration, and data processing utilities.
-LOS BLOQUES TRY NO TIENEN ESPACIOS ALREDEDOR, LOS EXCEPTION SI, LO MISMO CON EL RERTURN TRUE
 
 ## Libraries Order
 For mental clarity and consistency, imports in this project follow this order:
