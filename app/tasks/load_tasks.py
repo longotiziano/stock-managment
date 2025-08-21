@@ -12,7 +12,7 @@ def load_data_task(
     direction: Optional[Literal['stock_in', 'stock_out']] = None
 ) -> tuple[bool, None | Exception]:
     '''
-    General function to insert all the data into the database.
+    Función general para insertar todos los datos en la base de datos
     '''
     log_and_return(-9999, 'Started : "load_data_task"', 'INFO', __name__)
 
@@ -37,14 +37,13 @@ def load_data_task(
             if direction:
                 r_id = df['r_id'].iloc[0]
                 ok = rm_repo.update_stock_amounts(r_id, df, direction)
-                # update_stock_amounts() doesn't return anything meaningful; exceptions are handled by the decorator
+                # Aplico esta lógica debido a que update_stock_amounts no devuelve nada útil
                 try:
                     if not ok[0]:
-                        # These errors are already logged by the decorator
+                        # Estos errores ya se loggean con el decorador
                         failed_files.append(file)
                         continue
                 except TypeError:
-                    # In case `ok` is not subscriptable (e.g., the function returned None)
                     continue
 
             list_of_dicts = df.to_dict(orient='records')
@@ -56,7 +55,7 @@ def load_data_task(
                 failed_files.append(file)
 
         if failed_files:
-            # These are already logged, so there's no need to log again
+            # Estos ya están loggeados
             return False, ValueError(f'Please, verify the following files: {failed_files}')
 
         session.commit()    

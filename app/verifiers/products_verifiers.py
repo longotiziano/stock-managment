@@ -15,11 +15,11 @@ class ProductVerifier(VerifyExistence, StockAmountVerifier):
 class ProductDfVerifier(ProductVerifier):
     def products_df_verifier(self, r_id: int, df: pd.DataFrame) -> tuple[bool, str | dict]:
         '''
-        Verifies aspects the products in the Dataframe
-        - Their existence
-        - Negative amounts
-        And returns (True, "") if it's everything OK, otherwise it will return (False, errors_dict)
-        - errors_dict is a dict that indicates the error type and the list of problematic values
+        Verifica los aspectos de los productos en un DataFrame
+        - Su existencia
+        - Cantidades negativas
+        Si pasa la verificación con éxito devolverá (True, None), de lo contrario devolverá un diccionario que indica
+        los tipos de errores y una lista con los valores problemáticos
         '''
         errors_dict = {}
         exists_ok, exists_err = self.verify_existence_from_df(r_id, df)
@@ -37,4 +37,4 @@ class ProductDfVerifier(ProductVerifier):
             return False, errors_dict
         
         log_and_return(r_id, 'RawMaterialVerification : Finished', 'INFO', __name__)
-        return True, ""
+        return True, None

@@ -1,10 +1,5 @@
 # Repositories
 
-This module encapsulates database access logic and CSV managment.
-Repositories isolate direct SQLAlchemy queries, providing a clean interface to read, update, or delete data. They also create different types of CSV files for testing, monitoring, and simulating a production environment.
+Este módulo encapsula la lógica de acceso a la base de datos y la gestión de archivos CSV.
+Los repositorios aíslan las consultas directas de SQLAlchemy, proporcionando una interfaz limpia para leer, actualizar o eliminar datos. También crean diferentes tipos de archivos CSV para pruebas, monitoreo y simulación de un entorno de producción.
 
-## Responsibilities
-- Query the database using SQLAlchemy.
-- Provide reusable data access methods for each entity.
-- Keep controller and verifier layers decoupled from raw queries.
-- Create CSV files that simulate a production environment

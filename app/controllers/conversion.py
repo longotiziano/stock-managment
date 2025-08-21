@@ -10,12 +10,12 @@ from sqlalchemy.orm import Session
 @handle_db_errors 
 def products_to_raw_material_df(r_id: int, df: pd.DataFrame, session: Session) -> tuple[bool, pd.DataFrame]:
     '''
-    When received the products Dataframe, it returns a raw material Dataframe
+    Recibido un DataFrame de productos, devuelve un DataFrame de materia prima
     '''    
     raw_material_amounts = defaultdict(float)
 
     for row in df.itertuples():
-        # Give me the name and it's amount where the name it's equal to the one from the Dataframe
+        # "Dame el nombre y su cantidad donde el nombre es igual al del DataFrame"
         amount_by_products = (
             session.query(RawMaterial.rm_name, Recipes.rm_amount)
             .join(RawMaterial, RawMaterial.rm_id == Recipes.rm_id)
@@ -37,19 +37,18 @@ def products_to_raw_material_df(r_id: int, df: pd.DataFrame, session: Session) -
     
 def products_df_to_sales(r_id: int, df: pd.DataFrame, session: Session) -> tuple[bool, pd.DataFrame | list]:
     '''
-    Given a products DataFrame, returns a list of sales dictionaries
-    with product IDs matched by name.
+    Dado un DataFrame de productos, devuelve una lista de diccionarios de ventas, con la ID de producto compaginada con su nombre
     '''
-    # Obtaining all the IDs with a query 
+    # Obteniendo todos los IDs con una consulta
     repo = ProductsRepository(session)
     ok, product_map = repo.obtain_name_id_dict(r_id)
-    # Handling DB errors, with product_map as the possible error
+    # Manejando los posibles errores de la DB, con raw_material_map como posibilidad
     if not ok:
         return False, product_map
     
     list_of_dicts = []
     for row in df.itertuples():
-        # Getting the IDs of the matched products
+        # Obteniendo los IDs de las coincidencias
         product_id = product_map.get(row.product_name)
         sales_dict = {
             'r_id': r_id,
@@ -70,19 +69,19 @@ def raw_material_to_stock_movements(
     direction: Literal["stock_in", "stock_out"] = "stock_in"
     ) -> tuple[bool, pd.DataFrame | list]:
     '''
-    Given a raw material DataFrame, returns a list of stock movements dictionaries
-    with product IDs matched by name.
+    Dado un DataFrame de materia prima, devuelve una lista de diccionarios de movimientos de stock, con la ID de materia prima y la dirección
+    del movimientos
     '''
-    # Obtaining all the IDs with a query 
+    # Obteniendo todos los IDs con una consulta
     repo = RawMaterialRepository(session)
     ok, raw_material_map = repo.obtain_name_id_dict(r_id)
-    # Handling DB errors, with product_map as the possible error
+    # Manejando los posibles errores de la DB, con raw_material_map como posibilidad
     if not ok:
         return False, raw_material_map
     
     list_of_dicts = []
     for row in df.itertuples():
-        # Getting the IDs of the matched products
+        # Obteniendo los IDs de las coincidencias
         rm_id = raw_material_map.get(row.rm_name)
         stock_movement_dict = {
             'r_id' : r_id,

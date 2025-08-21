@@ -18,14 +18,14 @@ class NpEncoder(json.JSONEncoder):
 
 def my_serializer(value: Any) -> bytes:
     '''
-    Converts Python objects into JSON, then encodes them into bytes for Kafka.
+    Convierte objetos de Python en JSON, para luego codificar en bytes 
     '''
     return json.dumps(value, cls=NpEncoder).encode('utf-8')
 
 def my_deserializer(msg_bytes: bytes | None) -> Any | None:
     '''
-    Deserialize a Kafka message from bytes to a Python object (dict, list, etc.).
-    Returns None if the input is None.
+    Deserializa un mensaje de Kafka desde bytes a un objeto de Python.
+    Si el input es None, no devolverá nada
     '''
     if msg_bytes is None:
         return None
@@ -33,14 +33,14 @@ def my_deserializer(msg_bytes: bytes | None) -> Any | None:
 
 def encode_utf8(value: str) -> bytes:
     '''
-    Encodes a string into UTF-8 bytes.
+    Codifica una string en bytes 
     '''
     return str(value).encode('utf-8')
 
 def decode_utf8(value: bytes | None) -> str | None:
     '''
-    Decodes bytes into a UTF-8 string.
-    Returns None if the input is None.
+    Decodifica bytes en una string UTF-8
+    Si el input es None, no devolverá nada
     '''
     if value is None:
         return None
@@ -48,7 +48,7 @@ def decode_utf8(value: bytes | None) -> str | None:
 
 def list_csv_files(directory: str) -> tuple[bool, tuple[str, list] | Exception]:
     '''
-    Returns a list of CSV files from the directory provided.
+    Devuelve una lista de CSVs en el directorio dado
     '''
     try:
         csv_files = [f for f in os.listdir(directory) if f.endswith(".csv")]

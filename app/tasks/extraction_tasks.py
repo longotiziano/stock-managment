@@ -4,7 +4,7 @@ import time
 
 def csv_task(repo_class, method_name: str) -> tuple[bool, str | Exception]:
     '''
-    Generic task to create a CSV file using a repository.
+    Tarea genérica para crear un CSV utlizando un repositorio
     '''
     log_and_return(-9999, 'Started : "csv_task"', 'INFO', __name__)
     
@@ -22,7 +22,7 @@ def stock_addition_task():
     from app.repositories.raw_material_repository import RawMaterialRepository
     ok, directory = csv_task(RawMaterialRepository, 'create_csv_stock')
     if not ok:
-        # If it's not ok, the "directory" variable will be an exception.
+        # "directory" será una excepción si es False
         raise directory
     log_and_return(-9999, f'FinishedTask : "stock_addition_task"', 'INFO', __name__)
     return directory

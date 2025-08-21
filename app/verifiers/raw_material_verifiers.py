@@ -15,12 +15,12 @@ class RawMaterialVerifier(VerifyExistence, StockAmountVerifier):
 
 class RawMaterialDfVerifier(RawMaterialVerifier):
     '''
-    Verifies aspects the raw materials in the DataFrame
-    - Their existence
-    - Negative amounts
-    - Checks if the storage is enough for every amount
-    And returns (True, "") if it's everything OK, otherwise it will return (False, errors_dict)
-    - errors_dict is a dict that indicates the error type and the list of problematic values
+    Verifica los aspectos de los productos en un DataFrame
+    - Su existencia
+    - Cantidades negativas
+    - Que la cantidad almacenada sea mayor o igual que la consumida
+    Si pasa la verificación con éxito devolverá (True, None), de lo contrario devolverá un diccionario que indica
+    los tipos de errores y una lista con los valores problemáticos
     '''
     def rm_df_verifier(
         self,   

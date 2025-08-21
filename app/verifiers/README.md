@@ -1,12 +1,8 @@
 # Verifiers
 
-This module handles all validation logic.
+Este módulo maneja toda la lógica de validación.
 
-## Responsibilities
-- Ensure data consistency and correctness before it reaches the database.
-- Validate stock availability, entity existence, and negative amounts.
-- Handle both DataFrame-based and single-entry validation.
-
-## Structure
-- Base verifiers with common validation methods.
-- Entity-specific verifiers (e.g., raw materials, products).
+## Responsabilidades
+- Asegurar la consistencia y corrección de los datos antes de que lleguen a la base de datos.
+- Validar disponibilidad de stock, existencia de entidades y cantidades negativas.
+- Manejar tanto validaciones basadas en DataFrame como validaciones de entradas individuales.

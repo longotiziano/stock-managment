@@ -14,8 +14,8 @@ class Repository():
     @handle_db_errors
     def obtain_name_id_dict(self, r_id: int) -> tuple[bool, dict]:
         '''
-        Creating a dynamic function that returns a dict -> {'name':id} for better insertion in the different
-        repositories with a single query
+        Función dinámica que retorna un diccionario {'name':id} para mejor inserción en los diferentes
+        repositorios con una única consulta
         '''
         results = self.session.query(
             getattr(self.model, self.name),
@@ -28,13 +28,13 @@ class Repository():
     
     def get_restaurants(self) -> list:
         '''
-        Returns a list of restaurant IDs currently registered in the database.
+        Devuelve una lista de los IDs de los restaurantes registrados en la bse de datos
         '''
         return [r[0] for r in self.session.query(Restaurants.r_id).filter(Restaurants.r_id != -9999).all()]
     
     def _save_csv(self, r_id: int, data: list[dict], directory: str, filename_suffix: str) -> tuple[bool, None | Exception]:
         '''
-        Receives a list of dicts or tuples and creates the CSV file for the given restaurant ID.
+        Recibe una lista de diccionarios o tuplas y crea un CSV para el ID de restaurante asignado
         '''
         try:    
             df = pd.DataFrame(data)

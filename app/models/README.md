@@ -1,8 +1,8 @@
 # Models
 
-This directory contains the SQLAlchemy models representing the database schema.
-All models are auto-generated and follow a declarative style.
+Este directorio contiene los modelos de SQLAlchemy que representan el esquema de la base de datos.
+Todos los modelos son auto-generados y siguen un estilo declarativo.
 
-## Responsibilities
-- Define tables, columns, and relationships used in the application.
-- Serve as the interface between the database and the application logic.
+## Responsabilidades
+- Definir tablas, columnas y relaciones utilizadas en la aplicación.
+- Servir como interfaz entre la base de datos y la aplicación.

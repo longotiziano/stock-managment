@@ -12,9 +12,9 @@ class ProductsRepository(Repository):
 
     def random_consumption(self) -> tuple[bool, None | Exception]:
         '''
-        Creates a random consumption CSV file for every restaurant in the database.
+        Crea un CSV de consumo aleatorio para cada restaurante en la base de datos y devuelve su directorio
         '''
-        # Local import to avoid circular import
+        # Importación local para evitar importación circular
         from app.verifiers.products_verifiers import ProductVerifier
 
         restaurants_id = self.get_restaurants()

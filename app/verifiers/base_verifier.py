@@ -7,7 +7,7 @@ class Verifier(ABC):
     @handle_db_errors
     def _get_existing_values(self, r_id: int) -> list:
         ''' 
-        Getting existing values from the particular tables
+        Obteniendo los valores existentes de tablas particulares
         '''
         return [
             getattr(r, self.name)
@@ -28,9 +28,9 @@ class Verifier(ABC):
         pass
 
 class VerifyExistence(Verifier):
-    def verify_existence_from_df(self, r_id: int, df: pd.DataFrame) -> tuple[bool, str | list]:
+    def verify_existence_from_df(self, r_id: int, df: pd.DataFrame) -> tuple[bool, None | list]:
         '''
-        Verifying elements only for df
+        Verificando elementos solo para DataFrames
         '''
         existing_values = self._get_existing_values(r_id)
         errors = []
@@ -42,22 +42,22 @@ class VerifyExistence(Verifier):
         if errors:
             return False, errors
         
-        return True, ""
+        return True, None
     
-    def verify_existence(self, r_id: int, value: str) -> tuple[bool, str]:
+    def verify_existence(self, r_id: int, value: str) -> tuple[bool, None | str]:
         '''
-        Verifying singular values by existence, returning (True, "") or (False, value)
+        Verificando valores singulares por su existencia en al base de datos
         '''
         existing_values = self._get_existing_values(r_id)
 
         if value not in existing_values:
             return False, value
-        return True, ""
+        return True, None
     
 class StockAmountVerifier(Verifier):
-    def verify_negative_amounts_from_df(self, df: pd.DataFrame) -> tuple[bool, str | list]:
+    def verify_negative_amounts_from_df(self, df: pd.DataFrame) -> tuple[bool, None | list]:
         '''
-        Preventing negative amounts in the Dataframe
+        Previniendo cantidades negativas en el DataFrame
         '''
         errors = []
         for row in df.itertuples():
@@ -66,21 +66,21 @@ class StockAmountVerifier(Verifier):
                 errors.append(getattr(row, self.name))
         if errors:
             return False, errors
-        return True, ""
+        return True, None
             
-    def verify_amount(self, r_id: int, name: str, amount: float) -> tuple[bool, str]:
+    def verify_amount(self, r_id: int, name: str, amount: float) -> tuple[bool, None | str]:
         '''
-        Verifying singular amounts
+        Verificando cantidades singulares
         '''
         repository = RawMaterialRepository(self.session)
         rm_amount = repository._get_rm_amount(r_id, name)
         if rm_amount < amount:
             return False, name
-        return True, ""
+        return True, None
         
-    def verify_amount_from_df(self, r_id: int, df: pd.DataFrame) -> tuple[bool, str | list]:
+    def verify_amount_from_df(self, r_id: int, df: pd.DataFrame) -> tuple[bool, None | list]:
         '''
-        Verifying that the amount from the DataFrame doesn't surpass the one from the database
+        Verificando que la cantidad del DataFrame no supere a la existente en la base de datos
         '''
         errors = []
 
@@ -91,4 +91,4 @@ class StockAmountVerifier(Verifier):
 
         if errors:
             return False, errors
-        return True, ""
+        return True, None

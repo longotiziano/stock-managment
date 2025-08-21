@@ -13,10 +13,10 @@ producer = KafkaProducer(
 
 def _send_kafka_log(log_entry: dict) -> tuple[bool, Exception | None]:
     '''
-    Send a log entry to the Kafka broker.
+    Envía el log a Kafka
 
+    Crea topics de manera dinámica basandosé en el nivel del log.
     Creates topics dynamically based on the log level.
-    For 'ERROR' and 'CRITICAL' levels, waits for broker acknowledgment.
     '''
     try:
         future = producer.send(
@@ -38,19 +38,19 @@ def _make_event_dict(
     module: str = None
 ) -> tuple[bool, dict]:
     '''
-    Build the event dictionary for Kafka logging.
+    Crea el diccionario para el loggeo en Kafka
     '''
     return True, {
         "level": level,
         "message": message,
-        "timestamp": datetime.utcnow().isoformat(),  # ISO format for ordering and analysis
+        "timestamp": datetime.utcnow().isoformat(),  # Formato ISO para orden y análisis
         "module": module or "unknown", 
         "r_id": r_id
     }
 
 def log_and_return(r_id: int, msg: str, level: str, module: str, return_msg: str = None) -> tuple[bool, None | Exception]:
     '''
-    Helper to build a log entry and send it to Kafka
+    Helper para construir la entrada del log y enviarla a Kafka
     '''
     _, log_entry = _make_event_dict(r_id, msg, level, module)
     ok, kafka_error = _send_kafka_log(log_entry)
@@ -60,9 +60,7 @@ def log_and_return(r_id: int, msg: str, level: str, module: str, return_msg: str
 
 def handle_db_errors(func):
     '''
-    Decorator for database functions to:
-    - Catch SQLAlchemy-specific exceptions.
-    - Log them to Kafka.
+    Decorador para funciones con interacción directa con la base de datos, previniendo errores inesperados con la misma
     '''
     @wraps(func)
     def wrapper(*args, **kwargs):

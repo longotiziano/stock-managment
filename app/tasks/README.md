@@ -1,8 +1,7 @@
 # tasks
 
-This directory contains all the ETL logic that the program needs for creating, verifying, converting, and loading multiple files. 
+Este directorio contiene toda la lógica ETL que el programa necesita para crear, verificar, convertir y cargar múltiples archivos.
 
-## Responsibilities 
-- Provide reusable task functions for data extraction, transformation, and loading (ETL).
-- Keep orchestration layers decoupled from raw queries and heavy logic.
-- Create and manage CSV files for testing, monitoring, and simulating a production environment.
+## Responsabilidades
+- Proporcionar funciones de tareas reutilizables para extracción, transformación y carga de datos (ETL).
+- Mantener las capas de orquestación desacopladas de los datos sin procesar.

@@ -33,7 +33,7 @@ def log_insertion(batch_interval=300):
                 session.commit()
             buffer = []
             last_flush = now
-            consumer.commit() # Helps to keep track of the messages' offset
+            consumer.commit() # Ayuda a trackear el offset de los eventos
         time.sleep(1)
 
 ok, errors = log_insertion(5)

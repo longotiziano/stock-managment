@@ -1,9 +1,9 @@
 # Controllers
 
-This folder contains the logic that coordinates the application's operations.
-Controllers act as intermediaries between the input (e.g., user or API calls) and the underlying business logic and data access layers.
+Esta carpeta contiene la lógica que coordina las operaciones de la aplicación.
+Los controllers actúan como intermediarios entre la entrada (por ejemplo, el usuario o llamadas API) y la lógica de negocio y las capas de acceso a datos subyacentes.
 
-## Responsibilities
-- Orchestrate data flow between verifiers, repositories, and models.
-- Convert and process data structures (e.g., between DataFrames and model formats).
-- Handle higher-level workflows such as stock updates or sales registrations.
+## Responsabilidades
+- Transformar solicitudes y respuestas según sea necesario.
+- Asegurar que la lógica de negocio esté correctamente desacoplada de la presentación o de las interfaces externas.
+

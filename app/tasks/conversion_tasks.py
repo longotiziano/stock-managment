@@ -14,7 +14,7 @@ def processing_csv_task(
     **kwargs  
 ) -> tuple[bool, str | Exception]:
     '''
-    Manages conversion tasks such as sales, stock movements, and raw materials.    
+    Maneja las tareas de conversión, como ventas, movimientos de stock y materias primas
     '''
     log_and_return(-9999, 'Started : "processing_csv_task"', 'INFO', __name__)
 
@@ -37,8 +37,8 @@ def processing_csv_task(
                 return False, RuntimeError(f'Error while executing {function.__name__} in {file}') 
 
             if not database_ok:
-                # "returned_df" will be an SQLAlchemy exception if it occurs
-                # This type of errors already logs in the decorator
+                # "returned_df" será una excepción de SQLAlchemy en caso de dar False
+                # Este tipo de errores ya se loggean con el decorador
                 return False, returned_df
 
             output_path = os.path.join(assigned_directory, f'{r_id}_id_{file_name}.csv')

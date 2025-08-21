@@ -20,4 +20,6 @@ def daily_stock_consumption():
     load_sales_task(sales)
     load_stock_movements_task(stock_movements)
 
-daily_stock_consumption()
+if __name__ == "__main__":
+    weekly_stock_insertion()
+    daily_stock_consumption()

@@ -13,14 +13,14 @@ class RawMaterialRepository(Repository):
     
     def _rm_df_to_dict(self, df: pd.DataFrame) -> dict:
         '''
-        Building the dict that works for updating the database
+        Construye el diccionario que funciona para actualizar la base de datos
         '''
         return dict(zip(df['rm_name'], df['amount']))
 
     @handle_db_errors
     def _get_rm_amount(self, r_id: int, name: str) -> float:
         '''
-        Getting the stored amount of an specific raw material
+        Obtiene la cantidad almacenada de una materia prima específica
         '''
         rm_amount = self.session.query(Stock.stock_amount)\
             .join(RawMaterial, RawMaterial.rm_id == Stock.rm_id)\
@@ -38,12 +38,12 @@ class RawMaterialRepository(Repository):
         direction: Literal["stock_in", "stock_out"] = "stock_in"
         ) -> None:
         '''
-        Updating the stock amounts based on the DataFrame
+        Actualizando las cantidades de stock basadas en un DataFrame
         ''' 
-        # Build the lookup dict from the dataframe
+        # Construyendo el diccionario
         rm_dict = self._rm_df_to_dict(df)
 
-        # Query the stocks belonging to the restaurant and matching the raw material names
+        # Consultando el stock perteneciente al restaurante y coincidiendoló al nombre de las respectivas materias primas
         stocks = (
             self.session.query(Stock)
             .join(RawMaterial, Stock.rm_id == RawMaterial.rm_id)
@@ -51,11 +51,11 @@ class RawMaterialRepository(Repository):
                 RawMaterial.r_id == int(r_id),
                 RawMaterial.rm_name.in_(rm_dict.keys())
             )
-            .options(joinedload(Stock.raw_material))  # Load relationships in one go
+            .options(joinedload(Stock.raw_material))  
             .all()
         )
 
-        # Update the stock amounts
+        # Actualizar las cantidades
         for stock in stocks:
             rm_name = stock.raw_material.rm_name
             amount = rm_dict.get(rm_name, 0)
@@ -65,9 +65,10 @@ class RawMaterialRepository(Repository):
                     
     def create_csv_stock(self) -> tuple[bool, str | Exception]:
         '''
-        Creates a random stock addition CSV file for every restaurant in the database and returns the directory.
+        Crea un archivo CSV de agregación de stock para cada restaurante en la base de datos y
+        devuelve su directorio
         '''
-        # Local import to avoid circular import
+        # Importación local para evitar importación circular
         from app.verifiers.raw_material_verifiers import RawMaterialVerifier 
         import time
 
@@ -77,7 +78,7 @@ class RawMaterialRepository(Repository):
 
         for r_id in restaurants_id:
             raw_material_list = raw_material._get_existing_values(r_id)
-            # Here I use "for" in case that we want to change the addition of an especific stock
+            # Aquí uso "for" en el caso que queramos aplicar cambios en la agregación de algún específico stock
             rm_and_amount = []
             for rm in raw_material_list:
                 amount = 10000
