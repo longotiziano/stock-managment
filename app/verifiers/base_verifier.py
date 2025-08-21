@@ -1,10 +1,8 @@
-from app.kafka_python.producer import handle_db_errors
 from app.repositories.raw_material_repository import RawMaterialRepository
 import pandas as pd
 from abc import ABC, abstractmethod
     
 class Verifier(ABC):
-    @handle_db_errors
     def _get_existing_values(self, r_id: int) -> list:
         ''' 
         Obteniendo los valores existentes de tablas particulares
