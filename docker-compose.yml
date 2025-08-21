@@ -34,7 +34,7 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data 
       - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
-      - ./sql:/docker-entrypoint-initdb.d/backups
+      - ./sql/backups:/docker-entrypoint-initdb.d/backups
   pgadmin:
     image: dpage/pgadmin4
     restart: always
@@ -46,59 +46,59 @@ services:
     depends_on:
       - db
     
-  airflow-webserver:
-    build:
-      context: ./
-      dockerfile: airflow_folder/Dockerfile
-    restart: always
-    ports:
-      - "8080:8080"
-    command: webserver
-    environment:
-      - AIRFLOW__CORE__EXECUTOR=LocalExecutor 
-      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://postgres:andalaosa@db/airflow 
-      - AIRFLOW__WEBSERVER__SECRET_KEY=1f3a6b2d9a4e7c0f5d8b1234abcd5678
-    volumes:
-      - ./airflow_folder/dags:/opt/airflow/dags
-      - ./app:/opt/airflow/app
-      - ./sql:/opt/airflow/sql
-      - ./data:/opt/airflow/data
+  # airflow-webserver:
+  #   build:
+  #     context: ./
+  #     dockerfile: airflow_folder/Dockerfile
+  #   restart: always
+  #   ports:
+  #     - "8080:8080"
+  #   command: webserver
+  #   environment:
+  #     - AIRFLOW__CORE__EXECUTOR=LocalExecutor 
+  #     - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://postgres:andalaosa@db/airflow 
+  #     - AIRFLOW__WEBSERVER__SECRET_KEY=1f3a6b2d9a4e7c0f5d8b1234abcd5678
+  #   volumes:
+  #     - ./airflow_folder/dags:/opt/airflow/dags
+  #     - ./app:/opt/airflow/app
+  #     - ./sql:/opt/airflow/sql
+  #     - ./data:/opt/airflow/data
 
-  airflow-scheduler:
-    build:
-      context: ./
-      dockerfile: airflow_folder/Dockerfile
-    restart: always
-    command: scheduler
-    environment:
-      - AIRFLOW__SCHEDULER__SCHEDULER_HEARTBEAT_SEC=5
-      - AIRFLOW__SCHEDULER__MIN_FILE_PROCESS_INTERVAL=30
-      - AIRFLOW__SCHEDULER__DAG_DIR_LIST_INTERVAL=30
-      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
-      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://postgres:andalaosa@db/airflow
-      - AIRFLOW__WEBSERVER__SECRET_KEY=1f3a6b2d9a4e7c0f5d8b1234abcd5678
-    volumes:
-      - ./airflow_folder/dags:/opt/airflow/dags
-      - ./app:/opt/airflow/app
-      - ./sql:/opt/airflow/sql
-      - ./data:/opt/airflow/data  
+  # airflow-scheduler:
+  #   build:
+  #     context: ./
+  #     dockerfile: airflow_folder/Dockerfile
+  #   restart: always
+  #   command: scheduler
+  #   environment:
+  #     - AIRFLOW__SCHEDULER__SCHEDULER_HEARTBEAT_SEC=5
+  #     - AIRFLOW__SCHEDULER__MIN_FILE_PROCESS_INTERVAL=30
+  #     - AIRFLOW__SCHEDULER__DAG_DIR_LIST_INTERVAL=30
+  #     - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+  #     - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://postgres:andalaosa@db/airflow
+  #     - AIRFLOW__WEBSERVER__SECRET_KEY=1f3a6b2d9a4e7c0f5d8b1234abcd5678
+  #   volumes:
+  #     - ./airflow_folder/dags:/opt/airflow/dags
+  #     - ./app:/opt/airflow/app
+  #     - ./sql:/opt/airflow/sql
+  #     - ./data:/opt/airflow/data  
 
-  airflow-init:
-    image: apache/airflow:2.9.1
-    depends_on:
-      - db
-    entrypoint: |
-      bash -c "airflow db init && \
-      airflow users create --username admin --firstname Air --lastname Flow --role Admin --email admin@example.com --password admin123"
-    environment:
-      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
-      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://postgres:andalaosa@db/airflow
-      - AIRFLOW__WEBSERVER__SECRET_KEY=1f3a6b2d9a4e7c0f5d8b1234abcd5678
-    volumes:
-      - ./airflow_folder/dags:/opt/airflow/dags
-      - ./app:/opt/airflow/app
-      - ./sql:/opt/airflow/sql
-      - ./data:/opt/airflow/data
+  # airflow-init:
+  #   image: apache/airflow:2.9.1
+  #   depends_on:
+  #     - db
+  #   entrypoint: |
+  #     bash -c "airflow db init && \
+  #     airflow users create --username admin --firstname Air --lastname Flow --role Admin --email admin@example.com --password admin123"
+  #   environment:
+  #     - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+  #     - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://postgres:andalaosa@db/airflow
+  #     - AIRFLOW__WEBSERVER__SECRET_KEY=1f3a6b2d9a4e7c0f5d8b1234abcd5678
+  #   volumes:
+  #     - ./airflow_folder/dags:/opt/airflow/dags
+  #     - ./app:/opt/airflow/app
+  #     - ./sql:/opt/airflow/sql
+  #     - ./data:/opt/airflow/data
 
   python:
     build:
