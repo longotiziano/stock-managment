@@ -13,6 +13,3 @@ CONTAINER="stock_managment-db-1"
 docker exec $CONTAINER pg_dump -U $USER -F c -b -v -f /tmp/$DB_NAME_$DATE.backup $DB_NAME
 docker cp $CONTAINER:/tmp/$DB_NAME_$DATE.backup "$FILE"
 docker exec $CONTAINER rm /tmp/$DB_NAME_$DATE.backup
-
-#PGPASSWORD="andalaosa" pg_dump -h $HOST -U $USER -F c -b -v -f $FILE $DB_NAME
-
