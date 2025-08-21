@@ -6,7 +6,7 @@ Este directorio contiene el código principal de la aplicación, incluyendo acce
 Para mayor claridad mental y consistencia, las importaciones en este proyecto siguen este orden:
 1. Módulos del proyecto (orden alfabético)
 2. SQLAlchemy
-3. Kafka
+3. Airflow
 4. pandas
 
 ## Responsibilities

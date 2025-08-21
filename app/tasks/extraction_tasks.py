@@ -24,13 +24,11 @@ def stock_addition_task():
     if not ok:
         # "directory" será una excepción si es False
         raise directory
-    log_and_return(-9999, f'FinishedTask : "stock_addition_task"', 'INFO', __name__)
-    return directory
+    return str(directory)
 
 def random_consumption_task():
     from app.repositories.products_repository import ProductsRepository
     ok, directory = csv_task(ProductsRepository, 'random_consumption')
     if not ok:
         raise directory
-    log_and_return(-9999, f'FinishedTask : "random_consumption_task"', 'INFO', __name__)
-    return directory
+    return str(directory)

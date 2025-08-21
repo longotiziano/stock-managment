@@ -62,8 +62,7 @@ def products_conversion_task(directory_parameter):
     )
     if not ok:
         raise directory
-    log_and_return(-9999, f'FinishedTask : "products_conversion_task"', 'INFO', __name__)
-    return directory
+    return str(directory)
 
 def products_to_sales_task(directory_parameter):
     from app.controllers.conversion import products_df_to_sales
@@ -75,8 +74,7 @@ def products_to_sales_task(directory_parameter):
     )
     if not ok:
         raise directory
-    log_and_return(-9999, f'FinishedTask : "products_to_sales_task"', 'INFO', __name__)
-    return directory
+    return str(directory)
 
 def rm_to_stock_movements_task(directory_parameter, direction_parameter):
     from app.controllers.conversion import raw_material_to_stock_movements
@@ -89,5 +87,4 @@ def rm_to_stock_movements_task(directory_parameter, direction_parameter):
     )
     if not ok:
         raise directory
-    log_and_return(-9999, f'FinishedTask : "rm_to_stock_movements_task"', 'INFO', __name__)
-    return directory
+    return str(directory)
