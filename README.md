@@ -6,12 +6,12 @@ la visualización de ventas, productos y diversas métricas que considero que so
 
 # Arquitectura
 
-- El proyecto implementa un flujo de ingeniería de datos:
+El proyecto implementa un flujo de ingeniería de datos:
 - Extracción: datos de ventas y productos.
 - Transformación: cálculo de insumos consumidos por producto.
 - Carga: almacenamiento en una base de datos relacional (PostgreSQL).
 - Orquestación: tareas automatizadas con Apache Airflow.
-- Visualización: dashboard de métricas (Power BI).
+- Logging: Sistema de registros avanzado con Kafka.
 
 # Distribución de ramas
 
