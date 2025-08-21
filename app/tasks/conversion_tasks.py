@@ -1,4 +1,3 @@
-from app.kafka_python.producer import log_and_return
 from app.utils.helpers import list_csv_files
 from sql.database import SessionLocal
 import pandas as pd
@@ -16,11 +15,9 @@ def processing_csv_task(
     '''
     Maneja las tareas de conversión, como ventas, movimientos de stock y materias primas
     '''
-    log_and_return(-9999, 'Started : "processing_csv_task"', 'INFO', __name__)
 
     csv_ok, directory_csvs = list_csv_files(directory_parameter)
     if not csv_ok:
-        log_and_return(-9999, f'FileError : {directory_csvs}', 'ERROR', __name__)
         return False, RuntimeError(f'Error while listing CSVs: {directory_csvs}')
 
     previous_directory, csv_files = directory_csvs
@@ -33,19 +30,16 @@ def processing_csv_task(
             try:
                 database_ok, returned_df = function(r_id, df, session, **kwargs)
             except Exception as e:
-                log_and_return(r_id, f'ExecutionError : {e}', 'ERROR', __name__)
                 return False, RuntimeError(f'Error while executing {function.__name__} in {file}') 
 
             if not database_ok:
                 # "returned_df" será una excepción de SQLAlchemy en caso de dar False
-                # Este tipo de errores ya se loggean con el decorador
                 return False, returned_df
 
             output_path = os.path.join(assigned_directory, f'{r_id}_id_{file_name}.csv')
             try:
                 returned_df.to_csv(output_path, index=False)
             except Exception as e:
-                log_and_return(r_id, f'FileError : {e}', 'ERROR', __name__)
                 return False, RuntimeError(f"Couldn't save CSV file in {output_path}")
 
     return True, assigned_directory

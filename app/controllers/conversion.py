@@ -1,13 +1,11 @@
 from app.models.auto_models import RawMaterial, Products, Recipes
 from app.repositories.products_repository import ProductsRepository
 from app.repositories.raw_material_repository import RawMaterialRepository
-from app.kafka_python.producer import handle_db_errors, log_and_return
 import pandas as pd
 from typing import Literal
 from collections import defaultdict
 from sqlalchemy.orm import Session
 
-@handle_db_errors 
 def products_to_raw_material_df(r_id: int, df: pd.DataFrame, session: Session) -> tuple[bool, pd.DataFrame]:
     '''
     Recibido un DataFrame de productos, devuelve un DataFrame de materia prima
@@ -29,7 +27,6 @@ def products_to_raw_material_df(r_id: int, df: pd.DataFrame, session: Session) -
         for rm_name, rm_amount in amount_by_products:
             raw_material_amounts[rm_name] += float(rm_amount) * row.amount
 
-    log_and_return(r_id, 'FinishedConversion : "products_to_raw_material_df"', 'INFO', __name__)
     return True, pd.DataFrame([
         {'r_id': r_id, 'rm_name': k, 'amount': v}
         for k, v in raw_material_amounts.items()
@@ -58,7 +55,6 @@ def products_df_to_sales(r_id: int, df: pd.DataFrame, session: Session) -> tuple
 
         list_of_dicts.append(sales_dict)
 
-    log_and_return(r_id, 'FinishedConversion : "products_df_to_sales"', 'INFO', __name__)
     return True, pd.DataFrame(list_of_dicts)
 
 
@@ -92,7 +88,6 @@ def raw_material_to_stock_movements(
         
         list_of_dicts.append(stock_movement_dict)
 
-    log_and_return(r_id, 'FinishedConversion : "raw_material_to_stock_movements"', 'INFO', __name__)    
     return True, pd.DataFrame(list_of_dicts)
         
         

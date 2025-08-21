@@ -1,4 +1,3 @@
-from app.kafka_python.producer import handle_db_errors
 from app.models.auto_models import Restaurants
 import pandas as pd
 import os
@@ -11,7 +10,6 @@ class Repository():
     def __init__(self, session):
         self.session = session
     
-    @handle_db_errors
     def obtain_name_id_dict(self, r_id: int) -> tuple[bool, dict]:
         '''
         Función dinámica que retorna un diccionario {'name':id} para mejor inserción en los diferentes

@@ -9,4 +9,3 @@ Recipes = Base.classes.recipes
 Sales = Base.classes.sales
 StockMovements = Base.classes.stock_movements
 Stock = Base.classes.stock
-KafkaLogs = Base.classes.kafka_logs

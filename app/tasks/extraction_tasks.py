@@ -1,4 +1,3 @@
-from app.kafka_python.producer import log_and_return
 from sql.database import SessionLocal
 import time
 
@@ -6,7 +5,6 @@ def csv_task(repo_class, method_name: str) -> tuple[bool, str | Exception]:
     '''
     Tarea genérica para crear un CSV utlizando un repositorio
     '''
-    log_and_return(-9999, 'Started : "csv_task"', 'INFO', __name__)
     
     with SessionLocal() as session:
         repo = repo_class(session)

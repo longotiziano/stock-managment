@@ -1,4 +1,3 @@
-from app.kafka_python.producer import log_and_return
 from app.utils.helpers import list_csv_files
 from sql.database import SessionLocal
 from sqlalchemy.exc import SQLAlchemyError
@@ -14,11 +13,9 @@ def load_data_task(
     '''
     Función general para insertar todos los datos en la base de datos
     '''
-    log_and_return(-9999, 'Started : "load_data_task"', 'INFO', __name__)
 
     csv_ok, directory_csvs = list_csv_files(directory_parameter)
     if not csv_ok:
-        log_and_return(-9999, f'FileError : {directory_csvs}', 'ERROR', __name__)
         return False, RuntimeError(f'Error while listing CSVs: {directory_csvs}')
     
     previous_directory, csv_files = directory_csvs
@@ -40,7 +37,6 @@ def load_data_task(
                 # Aplico esta lógica debido a que update_stock_amounts no devuelve nada útil
                 try:
                     if not ok[0]:
-                        # Estos errores ya se loggean con el decorador
                         failed_files.append(file)
                         continue
                 except TypeError:
@@ -51,11 +47,9 @@ def load_data_task(
                 session.bulk_insert_mappings(table, list_of_dicts)
 
             except SQLAlchemyError:
-                log_and_return(-9999, f'BulkInsertError : {SQLAlchemyError}', 'ERROR', __name__)
                 failed_files.append(file)
 
         if failed_files:
-            # Estos ya están loggeados
             return False, ValueError(f'Please, verify the following files: {failed_files}')
 
         session.commit()    
@@ -67,7 +61,6 @@ def load_stock_movements_task(directory_parameter):
     ok, error = load_data_task(directory_parameter, StockMovements)
     if not ok:
         raise error
-    log_and_return(-9999, f'FinishedTask : "load_stock_movements_task"', 'INFO', __name__)
 
 def load_sales_task(directory_parameter):
     from app.models.auto_models import Sales
@@ -75,19 +68,16 @@ def load_sales_task(directory_parameter):
     ok, error = load_data_task(directory_parameter, Sales)
     if not ok:
         raise error
-    log_and_return(-9999, f'FinishedTask : "load_sales_task"', 'INFO', __name__)
 
 def update_rm_daily_task(directory_parameter):
     ok, error = load_data_task(directory_parameter, None, 'stock_out')
     if not ok:
         raise error
-    log_and_return(-9999, f'FinishedTask : "load_daily_rm_task"', 'INFO', __name__)
 
 def update_rm_weekly_task(directory_parameter):
     ok, error = load_data_task(directory_parameter, None, 'stock_in')
     if not ok:
         raise error
-    log_and_return(-9999, f'FinishedTask : "load_weekly_rm_task"', 'INFO', __name__)
 
     
         

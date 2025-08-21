@@ -1,5 +1,4 @@
 pandas
 sqlalchemy
 psycopg2-binary
-kafka-python
 numpy
