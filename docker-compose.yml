@@ -1,0 +1,115 @@
+services:
+  zookeeper: 
+    image: confluentinc/cp-zookeeper:7.5.0 
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181 
+    ports:
+      - "2181:2181" 
+
+  kafka:
+    image: confluentinc/cp-kafka:7.5.0
+    depends_on:
+      - zookeeper 
+    ports:
+      - "9092:9092" 
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092 
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092 
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: andalaosa
+      POSTGRES_DB: restaurants_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data 
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./sql:/docker-entrypoint-initdb.d/backups
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "8081:80"
+    depends_on:
+      - db
+    
+  airflow-webserver:
+    build:
+      context: ./
+      dockerfile: airflow_folder/Dockerfile
+    restart: always
+    ports:
+      - "8080:8080"
+    command: webserver
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor 
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://postgres:andalaosa@db/airflow 
+      - AIRFLOW__WEBSERVER__SECRET_KEY=1f3a6b2d9a4e7c0f5d8b1234abcd5678
+    volumes:
+      - ./airflow_folder/dags:/opt/airflow/dags
+      - ./app:/opt/airflow/app
+      - ./sql:/opt/airflow/sql
+      - ./data:/opt/airflow/data
+
+  airflow-scheduler:
+    build:
+      context: ./
+      dockerfile: airflow_folder/Dockerfile
+    restart: always
+    command: scheduler
+    environment:
+      - AIRFLOW__SCHEDULER__SCHEDULER_HEARTBEAT_SEC=5
+      - AIRFLOW__SCHEDULER__MIN_FILE_PROCESS_INTERVAL=30
+      - AIRFLOW__SCHEDULER__DAG_DIR_LIST_INTERVAL=30
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://postgres:andalaosa@db/airflow
+      - AIRFLOW__WEBSERVER__SECRET_KEY=1f3a6b2d9a4e7c0f5d8b1234abcd5678
+    volumes:
+      - ./airflow_folder/dags:/opt/airflow/dags
+      - ./app:/opt/airflow/app
+      - ./sql:/opt/airflow/sql
+      - ./data:/opt/airflow/data  
+
+  airflow-init:
+    image: apache/airflow:2.9.1
+    depends_on:
+      - db
+    entrypoint: |
+      bash -c "airflow db init && \
+      airflow users create --username admin --firstname Air --lastname Flow --role Admin --email admin@example.com --password admin123"
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://postgres:andalaosa@db/airflow
+      - AIRFLOW__WEBSERVER__SECRET_KEY=1f3a6b2d9a4e7c0f5d8b1234abcd5678
+    volumes:
+      - ./airflow_folder/dags:/opt/airflow/dags
+      - ./app:/opt/airflow/app
+      - ./sql:/opt/airflow/sql
+      - ./data:/opt/airflow/data
+
+  python:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - kafka
+      - db
+    volumes:
+      - ./:/app 
+
+volumes:
+  pgdata:
+
